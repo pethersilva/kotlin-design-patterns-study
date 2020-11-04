@@ -1,8 +1,5 @@
-abstract class AbstractDungeonMaster {
-
-	abstract val gameName: String
-
-	fun startGame() {
+abstract class AbstractDungeonMaster(private val gameName: String) {
+	open fun startGame() {
 		println("Game $gameName started")
 	}
 }
@@ -10,20 +7,30 @@ abstract class AbstractDungeonMaster {
 interface Dragon
 
 interface Greeter {
-
 	fun sayHello() {
 		println("Hello")
 	}
 }
 
-class DungeonMaster: Greeter, AbstractDungeonMaster() {
-	override val gameName: String
-		get() = "DungeonMaster gameName function implementation"
+open class DungeonMaster(gameName: String): Greeter, AbstractDungeonMaster(gameName)
+
+class EvilDungeonMaster(private val awfulGame: String) : DungeonMaster(awfulGame) {
+
+	override fun sayHello() {
+		println("Prepare to die!")
+	}
+
+	override fun startGame() {
+		println("$awfulGame will be your last!")
+	}
 }
 
 fun main(args: Array<String>)  {
-	val dungeonMaster = DungeonMaster()
+	val dungeonMaster = DungeonMaster("Dungeon Master Game")
 	dungeonMaster.startGame()
-	println(dungeonMaster.gameName)
 	dungeonMaster.sayHello()
+
+	val evilDungeonMaster = EvilDungeonMaster("Evil Game")
+	evilDungeonMaster.startGame()
+	evilDungeonMaster.sayHello()
 }
